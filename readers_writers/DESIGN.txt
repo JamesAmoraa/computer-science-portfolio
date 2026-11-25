@@ -1,0 +1,53 @@
+CS 5343 - MODULE 4 PROGRAMMING ASSIGNMENT
+Program 1: Readers-Writers Algorithm
+Student: James Sampson
+
+1. PURPOSE
+I implemented the readers-writers problem using C on Linux. The objective
+is to allow multiple readers to examine a shared integer simultaneously
+while ensuring that a writer modifies the integer by itself.
+
+2. THREADS AND SHARED DATA
+- Four pthread reader threads each perform three read operations.
+- One pthread writer thread performs four increments of 10.
+- The shared integer begins at 100, so the expected result is 140.
+- Short delays make overlapping readers and writer waiting visible.
+
+3. SYNCHRONIZATION DESIGN
+- reader_mutex is a POSIX binary semaphore. It protects active_readers
+  whenever the count increases or decreases.
+- resource_sem is a POSIX binary semaphore. A writer must acquire it
+  before updating shared_value.
+- The first reader acquires resource_sem. Additional readers enter
+  without reacquiring it. The final reader releases resource_sem.
+- output_mutex is a pthread mutex used only to avoid mixed output lines.
+- The parent thread calls pthread_join on every worker before cleanup.
+
+4. CORRECTNESS REASONING
+Reader safety: active_readers is changed only while reader_mutex is held,
+so the first/last reader decisions are not lost. While at least one reader
+is active, the readers collectively hold resource_sem. The writer cannot
+modify shared_value during that time.
+
+Writer safety: the writer holds resource_sem during each increment. The
+first reader cannot acquire it during a write, so the writer never
+modifies the value while readers are in their reading section.
+
+Completion: all loops have fixed bounds; the main thread joins every
+worker and then compares the shared value with the expected value.
+The output shows each reader entering and exiting and each writer update.
+
+5. CHOICES AND TRADEOFFS
+I used the classic readers-preference approach because it directly
+illustrates the algorithm used in operating systems courses. Readers may
+run concurrently, which gives more overlap than using one mutex around
+all reading and writing. The algorithm is not starvation-free: if new
+readers continually arrive, a writer may keep waiting. A service queue
+or writer-preference design would address that in a larger application.
+
+6. BUILD AND VALIDATION
+Build using `make` or compile with gcc and `-pthread` as shown in README.
+Run `./readers_writers` and confirm the last line is Verification: PASS.
+Event ordering may change between executions because Linux schedules
+threads independently. See sample_output.txt and terminal_output.png for
+an actual execution captured during testing.
