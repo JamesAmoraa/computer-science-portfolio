@@ -1,0 +1,39 @@
+James Sampson - CS 5343 - Programming 4 - Program 1
+Readers-writers demonstration: 4 readers, 1 writer
+Initial value: 100 | 3 reads/reader | 4 writes (+10 each)
+
+Reader 1 | round 1 | ENTER | value=100 | active readers=1
+Reader 2 | round 1 | ENTER | value=100 | active readers=2
+Reader 3 | round 1 | ENTER | value=100 | active readers=3
+Reader 4 | round 1 | ENTER | value=100 | active readers=4
+Reader 1 | round 1 | EXIT  | active readers=3
+Reader 2 | round 1 | EXIT  | active readers=2
+Reader 3 | round 1 | EXIT  | active readers=1
+Reader 4 | round 1 | EXIT  | active readers=0
+Writer   | round 1 | ENTER | exclusive write begins
+Writer   | round 1 | EXIT  | new value=110
+Reader 1 | round 2 | ENTER | value=110 | active readers=1
+Reader 2 | round 2 | ENTER | value=110 | active readers=2
+Reader 3 | round 2 | ENTER | value=110 | active readers=3
+Reader 4 | round 2 | ENTER | value=110 | active readers=4
+Reader 2 | round 2 | EXIT  | active readers=3
+Reader 1 | round 2 | EXIT  | active readers=2
+Reader 3 | round 2 | EXIT  | active readers=1
+Reader 4 | round 2 | EXIT  | active readers=0
+Writer   | round 2 | ENTER | exclusive write begins
+Writer   | round 2 | EXIT  | new value=120
+Reader 1 | round 3 | ENTER | value=120 | active readers=1
+Reader 2 | round 3 | ENTER | value=120 | active readers=2
+Reader 3 | round 3 | ENTER | value=120 | active readers=3
+Reader 4 | round 3 | ENTER | value=120 | active readers=4
+Reader 2 | round 3 | EXIT  | active readers=3
+Reader 1 | round 3 | EXIT  | active readers=2
+Reader 3 | round 3 | EXIT  | active readers=1
+Reader 4 | round 3 | EXIT  | active readers=0
+Writer   | round 3 | ENTER | exclusive write begins
+Writer   | round 3 | EXIT  | new value=130
+Writer   | round 4 | ENTER | exclusive write begins
+Writer   | round 4 | EXIT  | new value=140
+
+Final value: 140 | Expected value: 140
+Verification: PASS
